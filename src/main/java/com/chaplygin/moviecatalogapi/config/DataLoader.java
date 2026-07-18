@@ -1,4 +1,4 @@
-package com.chaplygin.moviecatalogapi.config;
+/*package com.chaplygin.moviecatalogapi.config;
 
 import com.chaplygin.moviecatalogapi.entity.Director;
 import com.chaplygin.moviecatalogapi.entity.Genre;
@@ -49,3 +49,4 @@ public class DataLoader implements CommandLineRunner {
     }
 
 }
+*/

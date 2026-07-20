@@ -5,6 +5,7 @@ import com.chaplygin.moviecatalogapi.dto.response.MovieResponseDto;
 import com.chaplygin.moviecatalogapi.entity.Director;
 import com.chaplygin.moviecatalogapi.entity.Genre;
 import com.chaplygin.moviecatalogapi.entity.Movie;
+import com.chaplygin.moviecatalogapi.exception.MovieNotFoundException;
 import com.chaplygin.moviecatalogapi.mapper.MovieMapper;
 import com.chaplygin.moviecatalogapi.repository.DirectorRepository;
 import com.chaplygin.moviecatalogapi.repository.GenreRepository;
@@ -48,9 +49,10 @@ public class MovieService {
         return movies.stream().map(movieMapper::toDto).toList();
     }
 
-    public Optional<MovieResponseDto> findById(Long id) {
+    public MovieResponseDto findById(Long id) {
 
-        return movieRepository.findById(id).map(movieMapper::toDto);
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
+        return movieMapper.toDto(movie);
     }
 
     public void delete(Long id) {

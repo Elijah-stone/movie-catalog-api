@@ -4,10 +4,12 @@ import com.chaplygin.moviecatalogapi.dto.request.MovieRequestDto;
 import com.chaplygin.moviecatalogapi.dto.response.MovieResponseDto;
 import com.chaplygin.moviecatalogapi.service.MovieService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+
 
 
 @RestController
@@ -21,8 +23,20 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<MovieResponseDto> findAll() {
-        return movieService.findAll();
+    public Page<MovieResponseDto> findAll(Pageable pageable) {
+        return movieService.findAll(pageable);
+    }
+
+
+
+    @GetMapping("/filter")
+    public Page<MovieResponseDto> filterByRating(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Double minRating,
+            @RequestParam(required = false) Integer minYear,
+            Pageable pageable
+    ) {
+        return movieService.filter(title, minRating, minYear, pageable);
     }
 
     @GetMapping("/{id}")
@@ -41,5 +55,6 @@ public class MovieController {
     public void delete(@PathVariable Long id) {
         movieService.delete(id);
     }
+
 
 }

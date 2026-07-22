@@ -10,10 +10,15 @@ import com.chaplygin.moviecatalogapi.mapper.MovieMapper;
 import com.chaplygin.moviecatalogapi.repository.DirectorRepository;
 import com.chaplygin.moviecatalogapi.repository.GenreRepository;
 import com.chaplygin.moviecatalogapi.repository.MovieRepository;
+import com.chaplygin.moviecatalogapi.specification.MovieSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class MovieService {
@@ -44,9 +49,8 @@ public class MovieService {
         return movieMapper.toDto(savedMovie);
     }
 
-    public List<MovieResponseDto> findAll() {
-        List<Movie> movies = movieRepository.findAll();
-        return movies.stream().map(movieMapper::toDto).toList();
+    public Page<MovieResponseDto> findAll(Pageable pageable) {
+        return movieRepository.findAll(pageable).map(movieMapper::toDto);
     }
 
     public MovieResponseDto findById(Long id) {
@@ -58,4 +62,37 @@ public class MovieService {
     public void delete(Long id) {
         movieRepository.deleteById(id);
     }
+
+
+
+    public Page<MovieResponseDto> filter(String title,
+                                         Double minRating,
+                                         Integer minYear,
+                                         Pageable pageable
+    ) {
+
+        Specification<Movie> specification = (root, query, cb) -> null;
+
+        if (title != null) {
+            specification = specification.and(MovieSpecification.titleContains(title));
+        }
+
+        if (minRating != null) {
+            specification = specification.and(
+                    MovieSpecification.ratingGreaterThanOrEqual(minRating)
+            );
+        }
+
+        if (minYear != null) {
+            specification = specification.and(
+                    MovieSpecification.releaseYearGreaterThanOrEqual(minYear)
+            );
+        }
+
+        return movieRepository.findAll(specification, pageable)
+                .map(movieMapper::toDto);
+    }
+
+
+
 }

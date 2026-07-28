@@ -40,8 +40,8 @@ public class MovieService {
     }
 
     public MovieResponseDto save(MovieRequestDto dto) {
-        Genre genre = genreRepository.findById(dto.getGenreId()).orElseThrow();
-        Director director = directorRepository.findById(dto.getDirectorId()).orElseThrow();
+        Genre genre = genreRepository.findById(dto.getGenreId()).orElseThrow(() -> new GenreNotFoundException(dto.getGenreId()));
+        Director director = directorRepository.findById(dto.getDirectorId()).orElseThrow(() -> new DirectorNotFoundException((dto.getDirectorId())));
         Movie movie = movieMapper.toEntity(dto);
         movie.setGenre(genre);
         movie.setDirector(director);
@@ -62,7 +62,10 @@ public class MovieService {
     }
 
     public void delete(Long id) {
-        movieRepository.deleteById(id);
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException(id));
+
+        movieRepository.delete(movie);
     }
 
     public MovieResponseDto update(Long id, MovieRequestDto dto) {

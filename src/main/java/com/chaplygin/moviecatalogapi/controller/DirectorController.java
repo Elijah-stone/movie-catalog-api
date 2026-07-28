@@ -91,7 +91,7 @@ public class DirectorController {
     }
 
     @Operation(
-            summary = "Delete genre",
+            summary = "Delete director",
             description = "Deletes director by unique identifier"
     )
     @ApiResponses({

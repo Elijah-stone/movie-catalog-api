@@ -39,7 +39,10 @@ public class GenreService {
     }
 
     public void delete(Long id) {
-        genreRepository.deleteById(id);
+        Genre genre = genreRepository.findById(id)
+                .orElseThrow(() -> new GenreNotFoundException(id));
+
+        genreRepository.delete(genre);
     }
 
     public GenreResponseDto update(Long id, GenreRequestDto dto) {

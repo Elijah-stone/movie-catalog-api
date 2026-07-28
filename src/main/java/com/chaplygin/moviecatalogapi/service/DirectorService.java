@@ -38,7 +38,10 @@ public class DirectorService {
     }
 
     public void delete(Long id) {
-        directorRepository.deleteById(id);
+        Director director = directorRepository.findById(id)
+                .orElseThrow(() -> new DirectorNotFoundException(id));
+
+        directorRepository.delete(director);
     }
 
     public DirectorResponseDto update(Long id, DirectorRequestDto dto) {

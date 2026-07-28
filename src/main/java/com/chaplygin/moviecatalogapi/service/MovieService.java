@@ -5,6 +5,8 @@ import com.chaplygin.moviecatalogapi.dto.response.MovieResponseDto;
 import com.chaplygin.moviecatalogapi.entity.Director;
 import com.chaplygin.moviecatalogapi.entity.Genre;
 import com.chaplygin.moviecatalogapi.entity.Movie;
+import com.chaplygin.moviecatalogapi.exception.DirectorNotFoundException;
+import com.chaplygin.moviecatalogapi.exception.GenreNotFoundException;
 import com.chaplygin.moviecatalogapi.exception.MovieNotFoundException;
 import com.chaplygin.moviecatalogapi.mapper.MovieMapper;
 import com.chaplygin.moviecatalogapi.repository.DirectorRepository;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 
-import java.util.List;
+
 
 
 @Service
@@ -61,6 +63,25 @@ public class MovieService {
 
     public void delete(Long id) {
         movieRepository.deleteById(id);
+    }
+
+    public MovieResponseDto update(Long id, MovieRequestDto dto) {
+
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
+        Genre genre = genreRepository.findById(dto.getGenreId()).orElseThrow(() -> new GenreNotFoundException(dto.getGenreId()));
+        Director director = directorRepository.findById((dto.getDirectorId())).orElseThrow(() -> new DirectorNotFoundException(dto.getDirectorId()));
+
+        movie.setTitle(dto.getTitle());
+        movie.setDescription(dto.getDescription());
+        movie.setReleaseYear(dto.getReleaseYear());
+        movie.setDuration(dto.getDuration());
+        movie.setRating(dto.getRating());
+        movie.setGenre(genre);
+        movie.setDirector(director);
+
+        Movie savedMovie = movieRepository.save(movie);
+
+        return  movieMapper.toDto(savedMovie);
     }
 
 

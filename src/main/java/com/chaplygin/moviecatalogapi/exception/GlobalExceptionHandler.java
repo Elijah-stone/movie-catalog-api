@@ -23,7 +23,28 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGenreNotFound(GenreNotFoundException exception, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                Map.of()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DirectorNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDirectorNotFound(DirectorNotFoundException exception, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                Map.of()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

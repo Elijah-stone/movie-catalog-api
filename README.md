@@ -8,18 +8,22 @@ The project provides CRUD operations, pagination, sorting, searching and dynamic
 
 # Technologies
 
-- Java 21
-- Spring Boot 3.5.16
-- Spring Web
-- Spring Data JPA
-- Hibernate
-- PostgreSQL 17
-- Maven
-- Lombok
-- Bean Validation
-- Swagger / OpenAPI
-- Docker
-- Docker Compose
+* Java 21
+* Spring Boot 3.5.16
+* Spring Web
+* Spring Data JPA
+* Hibernate
+* PostgreSQL 17
+* Maven
+* Lombok
+* Bean Validation
+* Swagger / OpenAPI
+* Docker
+* Docker Compose
+* JUnit 5
+* Mockito
+* MockMvc
+* JaCoCo
 
 ---
 
@@ -46,9 +50,21 @@ PostgreSQL
 
 Handles HTTP requests and responses.
 
+Responsible for:
+
+* request mapping;
+* validation triggering;
+* HTTP response generation.
+
 ### Service
 
 Contains business logic.
+
+Responsible for:
+
+* entity processing;
+* business rules validation;
+* handling application exceptions.
 
 ### Repository
 
@@ -62,24 +78,124 @@ Represents database tables.
 
 Objects used for transferring data between client and server.
 
+### Mapper
+
+Converts Entity objects to DTOs and DTOs to Entity objects.
+
 ---
 
 # Features
 
 Implemented:
 
-- Movie CRUD operations
-- Genre CRUD operations
-- Director CRUD operations
-- Pagination
-- Sorting
-- Searching movies by title
-- Dynamic filtering
-- Request validation
-- Global exception handling
-- Swagger API documentation
-- Dockerized application
-- PostgreSQL database container
+* Movie CRUD operations
+* Genre CRUD operations
+* Director CRUD operations
+* Pagination
+* Sorting
+* Searching movies by title
+* Dynamic filtering using JPA Specification
+* Request validation
+* Global exception handling
+* Swagger API documentation
+* Dockerized application
+* PostgreSQL database container
+* Unit testing
+* Controller testing
+* Code coverage analysis
+
+---
+
+# Testing
+
+The project contains automated tests for main application layers.
+
+Covered:
+
+## Service Layer
+
+Tested:
+
+* entity searching;
+* entity creation;
+* entity updating;
+* entity deletion;
+* exception handling.
+
+Tools:
+
+* JUnit 5
+* Mockito
+
+---
+
+## Controller Layer
+
+Tested using:
+
+* MockMvc
+* @WebMvcTest
+
+Covered:
+
+* GET requests;
+* POST requests;
+* PUT requests;
+* DELETE requests;
+* HTTP status codes;
+* JSON responses;
+* 404 error handling.
+
+---
+
+## Mapper Layer
+
+Tested:
+
+* Entity → DTO conversion;
+* DTO → Entity conversion.
+
+Covered mappers:
+
+* MovieMapper;
+* GenreMapper;
+* DirectorMapper.
+
+---
+
+## Specification Layer
+
+Tested dynamic filtering:
+
+* searching by movie title;
+* filtering by minimum rating;
+* filtering by release year.
+
+Testing performed with:
+
+* @DataJpaTest;
+* H2 database.
+
+---
+
+# Code Coverage
+
+JaCoCo is used to analyze test coverage.
+
+Current coverage:
+
+**Total coverage: 82%**
+
+Main modules:
+
+| Module        | Coverage |
+| ------------- | -------: |
+| Controller    |     100% |
+| Mapper        |     100% |
+| Specification |      91% |
+| Service       |      76% |
+| Config        |     100% |
+| DTO           |     100% |
 
 ---
 
@@ -91,26 +207,26 @@ Main entities:
 
 Fields:
 
-- title
-- description
-- release year
-- rating
-- duration
-- genre
-- director
+* title
+* description
+* release year
+* rating
+* duration
+* genre
+* director
 
 ## Genre
 
 Fields:
 
-- name
+* name
 
 ## Director
 
 Fields:
 
-- first name
-- last name
+* first name
+* last name
 
 Relationships:
 
@@ -154,8 +270,8 @@ http://localhost:8080/v3/api-docs
 
 Installed:
 
-- Java 21
-- Docker Desktop
+* Java 21
+* Docker Desktop
 
 ---
 
@@ -229,11 +345,11 @@ GET /movies/filter
 
 Supports:
 
-- title search
-- minimum rating
-- minimum release year
-- pagination
-- sorting
+* title search;
+* minimum rating;
+* minimum release year;
+* pagination;
+* sorting.
 
 ---
 
@@ -265,9 +381,10 @@ DELETE  /directors/{id}
 
 Planned:
 
-- Unit tests
-- Integration tests
-- Testcontainers
-- Spring Security
-- JWT authentication
-- Role-based access control
+* Integration tests with Testcontainers
+* CI/CD pipeline with GitHub Actions
+* Spring Security
+* JWT authentication
+* Role-based access control
+* Database migrations with Flyway or Liquibase
+* Monitoring and application metrics
